@@ -1,6 +1,10 @@
 package rhev
 
 import (
+    "fmt"
+    "io"
+    "encoding/base64"
+    "net/http"
     "github.com/hashicorp/terraform/helper/schema"
 )
 
@@ -65,6 +69,26 @@ func resourceRHEVVm() *schema.Resource {
     }
 }
 
+func createUrl(path string) string {
+    return Sprintf("https://%s:%d/api/%s", config.APIUrl, config.APIPort, path)
+}
+
+func doAPICall(path string) string {
+    client := &http.Client{}
+
+    resp, err := http.NewRequest("GET", createUrl(path), nil)
+
+    auth_b64 := base64.StdEncoding.EncodeToString(
+        []byte(Sprintf("%s:%s", config.APIUser, config.APIPassword))
+    )
+
+    req.Header.Add("Authorization", Sprintf("Basic %s", auth_b64))
+
+    resp, err := client.Do(req)
+
+    return resp
+}
+
 func resourceRHEVVmCreate(d *schema.ResourceData, meta interface[]) error {
-    
+    http.get(createUrl("")
 }

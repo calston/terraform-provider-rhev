@@ -22,6 +22,11 @@ func Provider() *schema.Provider {
                 Required: true,
                 Default:  "admin",
             },
+            "api_port": &schema.Schema{
+                Type:     schema.TypeInt,
+                Optional: true,
+                Default:  443,
+            },
         },
         ResourcesMap: map[string]*schema.Resource{
             "rhev_vm": resourceRHEVVm(),
@@ -35,6 +40,7 @@ func configureProvider(d *schema.ResourceData) (interface{}, error) {
         APIUrl:      d.Get("api_url").(string),
         APIUser:     d.Get("api_user").(string),
         APIPassword: d.Get("api_password").(string),
+        APIPort:     d.Get("api_port").(string),
     }
 
     return &config, nil
