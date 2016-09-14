@@ -5,7 +5,7 @@ import (
     "github.com/hashicorp/terraform/terraform"
 )
 
-func Provider() *schema.Provider {
+func Provider() terraform.ResourceProvider {
     return &schema.Provider{
         Schema: map[string]*schema.Schema{
             "api_url": &schema.Schema{

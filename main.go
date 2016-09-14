@@ -9,4 +9,5 @@ func main() {
     plugin.Serve(&plugin.ServeOpts{
         ProviderFunc: rhev.Provider,
     })
+
 }
