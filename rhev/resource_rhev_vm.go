@@ -51,6 +51,7 @@ func resourceRHEVVm() *schema.Resource {
             "volumes": &schema.Schema{
                 Type: schema.TypeList,
                 Optional: true,
+                ForceNew: true,
                 Elem: &schema.Resource{
                     Schema: map[string]*schema.Schema{
                         "size": &schema.Schema{Type: schema.TypeInt, Required: true},
@@ -69,21 +70,18 @@ func resourceRHEVVm() *schema.Resource {
 
 func resourceRHEVVmCreate(d *schema.ResourceData, meta interface{}) error {
     //config := meta.(*Config)
-
     //doAPICall("", config.)
     return nil
 }
 
 func resourceRHEVVmRead(d *schema.ResourceData, meta interface{}) error {
     //config := meta.(*Config)
-
     //doAPICall("", config)
     return nil
 }
 
 func resourceRHEVVmDelete(d *schema.ResourceData, meta interface{}) error {
     //config := meta.(*Config)
-
     //doAPICall("", config)
 
     return nil

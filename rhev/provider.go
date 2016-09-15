@@ -15,12 +15,10 @@ func Provider() terraform.ResourceProvider {
             "api_user": &schema.Schema{
                 Type:     schema.TypeString,
                 Required: true,
-                Default:  "admin",
             },
             "api_password": &schema.Schema{
                 Type:     schema.TypeString,
                 Required: true,
-                Default:  "admin",
             },
             "api_port": &schema.Schema{
                 Type:     schema.TypeInt,
@@ -40,7 +38,7 @@ func configureProvider(d *schema.ResourceData) (interface{}, error) {
         APIUrl:      d.Get("api_url").(string),
         APIUser:     d.Get("api_user").(string),
         APIPassword: d.Get("api_password").(string),
-        APIPort:     d.Get("api_port").(string),
+        APIPort:     d.Get("api_port").(int),
     }
 
     return &config, nil
