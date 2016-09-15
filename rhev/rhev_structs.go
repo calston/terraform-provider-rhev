@@ -1,5 +1,9 @@
 package rhev
 
+import (
+    "encoding/xml"
+)
+
 type RHEVAPILink struct {
     Href    string      `xml:"href,attr"`
     Name    string      `xml:"rel,attr"`
@@ -19,4 +23,28 @@ type RHEVAPIRoot struct {
     Links   []RHEVAPILink   `xml:"link"`
     SpecialObjects  RHEVAPISpecialObjects   `xml:"special_objects"`
     ProductInfo     RHEVAPIProductInfo      `xml:"product_info"`
+}
+
+type RHEVAPIBootDevice struct {
+    Dev         string      `xml:"dev,attr"`
+}
+
+type RHEVAPICpuTopology struct {
+    Cores       string      `xml:"cores,attr"`
+    Sockets     string      `xml:"sockets,attr"`
+}
+
+type RHEVAPIVMCreate struct {
+    XMLName     xml.Name            `xml:"vm"`
+    Name        string              `xml:"name"`
+    Cluster     string              `xml:"cluster>name"`
+    Template    string              `xml:"template>name"`
+    BootDevice  RHEVAPIBootDevice   `xml:"os>boot>dev"`
+    Type        string              `xml:"type"`
+    CPUTopology RHEVAPICpuTopology  `xml:"cpu>topology"`
+    Memory      int                 `xml:"memory"`
+}
+
+type RHEVAPIVMCreateResponse struct {
+    UUID          string      `xml:"vm>href,attr"`
 }

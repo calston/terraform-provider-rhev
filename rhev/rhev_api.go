@@ -14,16 +14,16 @@ func createUrl(path string, url string, port int) string {
     return fmt.Sprintf("https://%s:%d/api/%s", url, port, path)
 }
 
-func doAPICall(path string, url string, port int, user string, password string) *http.Response {
+func doAPICall(path string, config Config) *http.Response {
     transport := &http.Transport{
         TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
     }
 
     client := &http.Client{Transport: transport}
 
-    req, err := http.NewRequest("GET", createUrl(path, url, port), nil)
+    req, err := http.NewRequest("GET", createUrl(path, config.APIUrl, config.APIPort), nil)
 
-    up := fmt.Sprintf("%s:%s", user, password)
+    up := fmt.Sprintf("%s:%s", config.APIUser, config.APIPassword)
 
     auth_b64 := base64.StdEncoding.EncodeToString([]byte(up))
 
@@ -38,8 +38,8 @@ func doAPICall(path string, url string, port int, user string, password string) 
     return resp
 }
 
-func getAPIRoot(url string, port int, user string, password string) (RHEVAPIRoot, error) {
-    res := doAPICall("", url, port, user, password)
+func getAPIRoot(config Config) (RHEVAPIRoot, error) {
+    res := doAPICall("", config)
 
     if (res.StatusCode == 200) {
         decoder := xml.NewDecoder(res.Body)
@@ -54,3 +54,4 @@ func getAPIRoot(url string, port int, user string, password string) (RHEVAPIRoot
     }
     return RHEVAPIRoot{}, errors.New("Bad response code")
 }
+
