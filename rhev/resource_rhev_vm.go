@@ -4,7 +4,7 @@ import (
     "github.com/hashicorp/terraform/helper/schema"
     "encoding/xml"
     "log"
-    "os"
+    "github.com/claston/terraform-provider-rhev/rhev/api"
 )
 
 func resourceRHEVVm() *schema.Resource {
@@ -87,7 +87,7 @@ func resourceRHEVVm() *schema.Resource {
 func resourceRHEVVmCreate(d *schema.ResourceData, meta interface{}) error {
     //config := meta.(*Config)
 
-    vm := &RHEVAPIVMCreate{
+    vm := &api.RHEVVM{
         Name:       d.Get("name").(string),
         Template:   d.Get("template").(string),
         Memory:     d.Get("memory").(int) * 1024 * 1024,
@@ -109,10 +109,8 @@ func resourceRHEVVmCreate(d *schema.ResourceData, meta interface{}) error {
 
     if blob != nil {}
 
-    //os.Stdout.Write([]byte(config.APIUser))
-    os.Stdout.Write(blob)
 
-    //doAPICall("", config.)
+
     return nil
 }
 

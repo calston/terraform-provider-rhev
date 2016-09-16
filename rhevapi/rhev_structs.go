@@ -1,8 +1,15 @@
-package rhev
+package api
 
 import (
     "encoding/xml"
 )
+
+type Config struct {
+    APIUrl      string
+    APIUser     string
+    APIPassword string
+    APIPort     int
+}
 
 type RHEVAPILink struct {
     Href    string      `xml:"href,attr"`
@@ -34,7 +41,7 @@ type RHEVAPICpuTopology struct {
     Sockets     string      `xml:"sockets,attr"`
 }
 
-type RHEVAPIVMCreate struct {
+type RHEVVM struct {
     XMLName     xml.Name            `xml:"vm"`
     Name        string              `xml:"name"`
     Cluster     string              `xml:"cluster>name"`
@@ -48,3 +55,5 @@ type RHEVAPIVMCreate struct {
 type RHEVAPIVMCreateResponse struct {
     UUID          string      `xml:"vm>href,attr"`
 }
+
+

@@ -1,4 +1,4 @@
-package rhev
+package api
 
 
 import (
@@ -9,7 +9,7 @@ import (
 )
 
 func TestVMCreateStruct(t *testing.T) {
-    vm := &RHEVAPIVMCreate{
+    vm := &RHEVVM{
         Name:        "testvm",
         Template:    "mytemplate",
         Memory:      1024 * 1024 * 1024,
