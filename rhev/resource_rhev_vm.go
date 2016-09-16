@@ -2,9 +2,8 @@ package rhev
 
 import (
     "github.com/hashicorp/terraform/helper/schema"
-    "encoding/xml"
+    "github.com/calston/terraform-provider-rhev/rhevapi"
     "log"
-    "github.com/claston/terraform-provider-rhev/rhev/api"
 )
 
 func resourceRHEVVm() *schema.Resource {
@@ -85,31 +84,33 @@ func resourceRHEVVm() *schema.Resource {
 
 
 func resourceRHEVVmCreate(d *schema.ResourceData, meta interface{}) error {
-    //config := meta.(*Config)
+    config := meta.(*rhevapi.Config)
 
-    vm := &api.RHEVVM{
-        Name:       d.Get("name").(string),
-        Template:   d.Get("template").(string),
-        Memory:     d.Get("memory").(int) * 1024 * 1024,
-        CPUTopology: RHEVAPICpuTopology{
+    vm := &rhevapi.RHEVVM{
+        Name:           d.Get("name").(string),
+        Template:       d.Get("template").(string),
+        Memory:         d.Get("memory").(int) * 1024 * 1024,
+        CPUTopology:    rhevapi.RHEVCpuTopology{
             Cores:      string(d.Get("cpu_cores").(int)),
             Sockets:    string(d.Get("cpu_sockets").(int)),
         },
-        BootDevice:  RHEVAPIBootDevice{Dev: "hd",},
-        Cluster:    "default",
-        Type:       "server",
+        BootDevice:     rhevapi.RHEVBootDevice{Dev: "hd",},
+        Cluster:        "default",
+        Type:           "server",
+        CloudInit:      rhevapi.RHEVCloudInit{
+            Hostname:   d.Get("name").(string),
+            PublicKey:  d.Get("public_key").(string),
+            Username:   d.Get("default_user").(string),
+        },
     }
 
-    blob, err := xml.MarshalIndent(vm, "  ", "    ")
+    response, err := rhevapi.Post("/vms", vm, *config)
 
     if err != nil {
         log.Fatal(err)
-        return err
     }
 
-    if blob != nil {}
-
-
+    if response != nil {}
 
     return nil
 }

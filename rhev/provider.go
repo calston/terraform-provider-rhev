@@ -3,6 +3,7 @@ package rhev
 import (
     "github.com/hashicorp/terraform/helper/schema"
     "github.com/hashicorp/terraform/terraform"
+    "github.com/calston/terraform-provider-rhev/rhevapi"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -20,11 +21,6 @@ func Provider() terraform.ResourceProvider {
                 Type:     schema.TypeString,
                 Required: true,
             },
-            "api_port": &schema.Schema{
-                Type:     schema.TypeInt,
-                Optional: true,
-                Default:  443,
-            },
         },
         ResourcesMap: map[string]*schema.Resource{
             "rhev_vm": resourceRHEVVm(),
@@ -34,11 +30,10 @@ func Provider() terraform.ResourceProvider {
 }
 
 func configureProvider(d *schema.ResourceData) (interface{}, error) {
-    config := Config{
-        APIUrl:      d.Get("api_url").(string),
-        APIUser:     d.Get("api_user").(string),
-        APIPassword: d.Get("api_password").(string),
-        APIPort:     d.Get("api_port").(int),
+    config := rhevapi.Config{
+        Url:      d.Get("api_url").(string),
+        User:     d.Get("api_user").(string),
+        Password: d.Get("api_password").(string),
     }
 
     return &config, nil

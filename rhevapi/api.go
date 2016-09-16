@@ -2,7 +2,6 @@ package rhevapi
 
 import (
     "errors"
-    "log"
     "fmt"
     "encoding/xml"
     "encoding/base64"
@@ -51,16 +50,24 @@ func doAPICall(path string, method string, data *string, config Config) (*http.R
     return resp, nil
 }
 
-func RHEVAPIGet(path string, config Config) (*http.Response, error) {
+func Get(path string, config Config) (*http.Response, error) {
     return doAPICall(path, "GET", nil, config)
 }
 
-func RHEVAPIPost(path string, payload *string, config Config) (*http.Response, error) {
-    return doAPICall(path, "POST", payload, config)
+func Post(path string, apiobj interface{}, config Config) (*http.Response, error) {
+    payload, err := xml.Marshal(apiobj)
+
+    if err != nil {
+        return nil, err
+    }
+
+    strPayload := string(payload)
+
+    return doAPICall(path, "POST", &strPayload, config)
 }
 
 func getAPIRoot(config Config) (*RHEVRoot, error) {
-    res, err := RHEVAPIGet("", config)
+    res, err := Get("", config)
 
 
     if err != nil {
@@ -80,19 +87,6 @@ func getAPIRoot(config Config) (*RHEVRoot, error) {
     }
 
     return nil, errors.New("Bad response code")
-}
-
-func CreateVMXML(vm *RHEVVM) (string, error) {
-    // Creates a VM and returns the unique ID
-
-    blob, err := xml.MarshalIndent(*vm, "  ", "    ")
-
-    if err != nil {
-        log.Fatal(err)
-        return "", err
-    }
-
-    return string(blob), nil
 }
 
 func httpXMLParse(xmlstruct interface{}, res *http.Response) error {
