@@ -3,9 +3,8 @@ package api
 
 import (
     "testing"
-    "os"
+    "fmt"
     "log"
-    "encoding/xml"
 )
 
 func TestVMCreateStruct(t *testing.T) {
@@ -19,9 +18,11 @@ func TestVMCreateStruct(t *testing.T) {
         Type:       "server",
     }
 
-    blob, err := xml.MarshalIndent(vm, "  ", "    ")
+    xml, err := CreateVMXML(vm)
+
     if err != nil {
         log.Fatal(err)
+    } else {
+        fmt.Printf("%v", xml)
     }
-    os.Stdout.Write(blob)
 }

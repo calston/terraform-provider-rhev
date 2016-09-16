@@ -75,17 +75,15 @@ func getAPIRoot(config Config) (RHEVAPIRoot, error) {
     return RHEVAPIRoot{}, errors.New("Bad response code")
 }
 
-func CreateVM(vm RHEVVM) (string, error) {
+func CreateVMXML(vm *RHEVVM) (string, error) {
     // Creates a VM and returns the unique ID
 
-    blob, err := xml.MarshalIndent(vm, "  ", "    ")
+    blob, err := xml.MarshalIndent(*vm, "  ", "    ")
 
     if err != nil {
         log.Fatal(err)
         return "", err
     }
-
-    if blob != nil {}
 
     return string(blob), nil
 }
